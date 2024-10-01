@@ -22,3 +22,7 @@ class OperatorPressed extends CalculatorEvent {
 class CalculateResult extends CalculatorEvent {}
 
 class Clear extends CalculatorEvent {}
+
+class ClearEntry extends CalculatorEvent {}
+
+class DeleteLastEntry extends CalculatorEvent {}

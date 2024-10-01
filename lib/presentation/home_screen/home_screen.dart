@@ -40,45 +40,82 @@ class HomeScreen extends StatelessWidget {
             child: BlocBuilder<CalculatorBloc, CalculatorState>(
               builder: (context, state) {
                 String displayText = '';
+                String subDisplayText = '';
                 // Kiểm tra nếu state là CalculatorInitialState và lấy display từ đó
                 if (state is CalculatorInitialState) {
                   displayText = state
                       .display; // Lấy giá trị 'display' từ CalculatorInitialState
+                  subDisplayText = state.subDisplay;
                 } else if (state is CalculatorInputState) {
                   displayText = state
                       .display; // Lấy giá trị 'display' từ CalculatorInputState
+                  subDisplayText = state.subDisplay;
                 } else if (state is CalculatorResultState) {
                   displayText = state
                       .display; // Lấy giá trị 'display' từ CalculatorResultState
+                  subDisplayText = state.subDisplay;
                 } else if (state is CalculatorErrorState) {
                   displayText = state.error; // Hiển thị lỗi nếu có lỗi
                 }
 
-                return Container(
-                  alignment: Alignment.bottomRight,
-                  padding: EdgeInsets.all(32),
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal, // Cho phép cuộn ngang
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                        minWidth: 0,
-                        maxWidth: MediaQuery.of(context)
-                            .size
-                            .width, // Giới hạn chiều rộng
-                      ),
-                      child: AutoSizeText(
-                        displayText,
-                        style: const TextStyle(
-                          fontSize: 48,
-                          fontWeight: FontWeight.bold,
+                return Column(
+                  children: [
+                    Container(
+                      alignment: Alignment.bottomRight,
+                      padding: EdgeInsets.only(right: 32),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal, // Cho phép cuộn ngang
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            minWidth: 0,
+                            maxWidth: MediaQuery.of(context)
+                                .size
+                                .width, // Giới hạn chiều rộng
+                          ),
+                          child: AutoSizeText(
+                            subDisplayText,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey,
+                            ),
+                            maxLines: 1, // Giới hạn chỉ 1 dòng
+                            minFontSize:
+                                10, // Kích thước chữ nhỏ nhất khi thu nhỏ
+                            overflow: TextOverflow
+                                .clip, // Không thêm dấu '...', cho phép cuộn
+                          ),
                         ),
-                        maxLines: 1, // Giới hạn chỉ 1 dòng
-                        minFontSize: 18, // Kích thước chữ nhỏ nhất khi thu nhỏ
-                        overflow: TextOverflow
-                            .clip, // Không thêm dấu '...', cho phép cuộn
                       ),
                     ),
-                  ),
+                    Container(
+                      alignment: Alignment.bottomRight,
+                      padding: EdgeInsets.all(32),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal, // Cho phép cuộn ngang
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            minWidth: 0,
+                            maxWidth: MediaQuery.of(context)
+                                .size
+                                .width, // Giới hạn chiều rộng
+                          ),
+                          child: AutoSizeText(
+                            displayText,
+                            style: const TextStyle(
+                              fontSize: 48,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            maxLines: 1, // Giới hạn chỉ 1 dòng
+                            minFontSize:
+                                18, // Kích thước chữ nhỏ nhất khi thu nhỏ
+                            overflow: TextOverflow
+                                .clip, // Không thêm dấu '...', cho phép cuộn
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 );
               },
             ),
@@ -129,6 +166,10 @@ class HomeScreen extends StatelessWidget {
 
     if (value == 'C') {
       calculatorBloc.add(Clear());
+    } else if (value == 'CE') {
+      calculatorBloc.add(ClearEntry()); // Xử lý sự kiện CE
+    } else if (value == 'Del') {
+      calculatorBloc.add(DeleteLastEntry()); // Xử lý sự kiện Del
     } else if (value == '+' || value == '-' || value == '*' || value == '/') {
       calculatorBloc.add(OperatorPressed(value));
     } else if (value == '=') {

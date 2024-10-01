@@ -12,10 +12,11 @@ abstract class CalculatorState extends Equatable {
 /// Khi ứng dụng mới khởi động, trạng thái sẽ là trạng thái ban đầu.
 class CalculatorInitialState extends CalculatorState {
   final String display;
+  final String subDisplay;
 
   const CalculatorInitialState()
-      : display = "0"; // Màn hình ban đầu hiển thị "0"
-
+      : display = "0",
+        subDisplay = "";
   @override
   List<Object> get props => [display];
 }
@@ -24,8 +25,9 @@ class CalculatorInitialState extends CalculatorState {
 /// Khi người dùng nhập số hoặc toán tử, trạng thái sẽ chuyển sang trạng thái này.
 class CalculatorInputState extends CalculatorState {
   final String display;
+  final String subDisplay;
 
-  const CalculatorInputState(this.display);
+  const CalculatorInputState(this.display, this.subDisplay);
 
   @override
   List<Object> get props => [display];
@@ -35,8 +37,9 @@ class CalculatorInputState extends CalculatorState {
 /// Khi người dùng nhấn nút "=" để xem kết quả, trạng thái sẽ chuyển sang trạng thái này.
 class CalculatorResultState extends CalculatorState {
   final String display;
+  final String subDisplay;
 
-  const CalculatorResultState(this.display);
+  const CalculatorResultState(this.display, this.subDisplay);
 
   @override
   List<Object> get props => [display];
